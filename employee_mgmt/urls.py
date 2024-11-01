@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from employee_mgmt.viewsets import EmployeeViewSet
 
@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/employees/', EmployeeViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('api/employees/<int:id>/', EmployeeViewSet.as_view(
         {'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
+    path('api/', include('hr_portal.urls')),
 ]

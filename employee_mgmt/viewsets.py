@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from employee_mgmt.filters import EmployeeFilter
 from employee_mgmt.models import Employee
+from employee_mgmt.pagination import SmallResultsSetPagination
 from employee_mgmt.serializers import EmployeeSerializer
 
 
@@ -13,6 +14,7 @@ class EmployeeViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_class = EmployeeFilter
+    pagination_class = SmallResultsSetPagination
 
     def perform_destroy(self, instance: Employee):
         instance.is_deleted = True

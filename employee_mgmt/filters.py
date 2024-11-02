@@ -16,7 +16,7 @@ class EmployeeFilter(django_filters.FilterSet):
 
     @staticmethod
     def filter_role_not_in(queryset: QuerySet[Employee], _: str, value: str):
-        return queryset.exclude(role__in=[val.upper() for val in value.split(',')])
+        return queryset.exclude(role__in=[val.upper().strip() for val in value.split(',')])
 
     class Meta:
         model = Employee

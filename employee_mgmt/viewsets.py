@@ -1,5 +1,7 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from employee_mgmt.filters import EmployeeFilter
 from employee_mgmt.models import Employee
 from employee_mgmt.serializers import EmployeeSerializer
 
@@ -9,6 +11,8 @@ class EmployeeViewSet(ModelViewSet):
     serializer_class = EmployeeSerializer
     lookup_field = 'id'
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = EmployeeFilter
 
     def perform_destroy(self, instance: Employee):
         instance.is_deleted = True

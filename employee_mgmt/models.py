@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from .validators import name_validator
 
 class NonDeleted(models.Manager):
     def get_queryset(self):
@@ -29,7 +30,7 @@ class Role(models.TextChoices):
 
 
 class Employee(BaseModel):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, validators=[name_validator])
     email = models.EmailField(max_length=128, unique=True)
     department = models.CharField(max_length=32, choices=Department, blank=True)
     role = models.CharField(max_length=32, choices=Role, blank=True)

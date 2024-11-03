@@ -1,5 +1,5 @@
 import pytest
-from employee_mgmt.models import Employee
+from employee_mgmt.models import Employee, Department, Role
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
@@ -36,5 +36,7 @@ def employee_large_payload() -> dict:
     """Fixture to provide an employee payload with all the optional fields"""
     return {
         'name': 'Joey Dalton',
-        'email': 'joey@dalton.com'
+        'email': 'joey@dalton.com',
+        'department': Department.ENGINEERING,
+        'role': Role.MANAGER
     }

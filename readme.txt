@@ -6,6 +6,9 @@ NOTE:
 - The API documentation is mentioned under 'api_doc.md' file for your quick reference
 - Please refer the postman collection for API examples and documentation
   -- Employee_Management_REST_APIs.postman_collection.json
+- ADMIN PORTAL: (HEADLESS CMS)
+  -- Please refer admin portal: http://localhost:8000/admin/
+  to manage the employee records and users
 
 Creating users who will manage the employees:
 - To create a new user, run the below command from the terminal and enter the username and password.

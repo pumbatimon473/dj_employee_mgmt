@@ -9,4 +9,5 @@ class EmployeeSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         instance_dict = super().to_representation(instance)
         instance_dict['date_joined'] = instance_dict.get('created_at')
+        del instance_dict['is_deleted']
         return instance_dict

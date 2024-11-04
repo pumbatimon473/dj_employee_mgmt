@@ -1,0 +1,1322 @@
+{
+	"info": {
+		"_postman_id": "77e74bca-4bf2-437d-a699-3fc3447896f4",
+		"name": "Employee Management REST APIs",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" width=\"2162\" height=\"1530\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20054625"
+	},
+	"item": [
+		{
+			"name": "hr_portal",
+			"item": [
+				{
+					"name": "get token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code == 200) {\r",
+									"    let jsonResponse = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"access_token\", jsonResponse.access);\r",
+									"    pm.collectionVariables.set(\"refresh_token\", jsonResponse.refresh);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/token/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"token",
+								""
+							]
+						},
+						"description": "### API Token Request\n\nThis endpoint is used to authenticate and obtain a token for accessing protected resources.\n\n#### Request Body\n\n- `username` (string) - The username of the user.\n    \n- `password` (string) - The password of the user.\n    \n\n#### Response\n\nThe response is in JSON format and includes the following fields:\n\n- `refresh` (string) - The refresh token for obtaining a new access token.\n    \n- `access` (string) - The access token for accessing protected resources.\n    \n\n#### JSON Schema\n\n``` json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"refresh\": {\n            \"type\": \"string\"\n        },\n        \"access\": {\n            \"type\": \"string\"\n        }\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"if (pm.response.code == 200) {\r",
+									"    let jsonResponse = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"access_token\", jsonResponse.access);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/token/refresh/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"token",
+								"refresh",
+								""
+							]
+						},
+						"description": "## API Refresh Token Request\n\nThis endpoint is used to refresh an access token by sending a POST request to the specified URL. The request should include a JSON payload with a \"refresh\" key containing the refresh token.\n\n### Request Body\n\n- refresh (string, required): The refresh token used to obtain a new access token.\n    \n\n### Response\n\nThe response to this request is a JSON object with the \"access\" key, which contains the new access token.\n\n### JSON Schema\n\n``` json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"access\": {\n            \"type\": \"string\"\n        }\n    }\n}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "employee_mgmt",
+			"item": [
+				{
+					"name": "List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/employees/?page=last",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"employees",
+								""
+							],
+							"query": [
+								{
+									"key": "department",
+									"value": "HR",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "DEVELOPER",
+									"disabled": true
+								},
+								{
+									"key": "department__in",
+									"value": "ANALYST, ENGINEERING",
+									"disabled": true
+								},
+								{
+									"key": "role__in",
+									"value": "ANALYST, DEVELOPER, MANAGER",
+									"disabled": true
+								},
+								{
+									"key": "department__not",
+									"value": "HR",
+									"disabled": true
+								},
+								{
+									"key": "role__not",
+									"value": "DEVELOPER",
+									"disabled": true
+								},
+								{
+									"key": "department__not__in",
+									"value": "HR, SALES",
+									"disabled": true
+								},
+								{
+									"key": "role__not__in",
+									"value": "ANALYST, MANAGER",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "last"
+								}
+							]
+						},
+						"description": "### Get Employee Data\n\nThis endpoint makes a GET request to retrieve employee data.\n\n#### Query Params\n\n- `department`: applicable values `HR`, `ENGINEERING`, `SALES`\n    \n- `role`: applicable values `DEVELOPER`, `MANAGER`, `ANALYST`\n    \n- `department__in`: inclusive filter to allow filtering the results on multiple values e.g., `HR, SALES`\n    \n- `role_in`: inclusive filter to allow filtering the results on multiple values e.g., `MANAGER, ANALYST`\n    \n- `department__not`: allows filtering the results not having the mentioned department\n    \n- `role__not`: allows filtering the results not having the mentioned role\n    \n- `department__not__in`: exclusive filter to allow filtering the results not having the mentioned values e.g., `HR, SALES`\n    \n- `role__not__in`: exclusive filter to allow filtering the results not having the mentioned values e.g., `ANALYST, MANAGER`\n    \n- `page`: allows you to retrieve the mentioned page number from the paginated resultset e.g., `2` or `last`\n    \n\n#### Request Body\n\nThis is a GET request and does not include a request body.\n\n#### Response Body\n\nThe response returns a JSON object with the following structure:\n\n- `count` (number): The total count of employees.\n    \n- `next` (string): Link to the next page of results.\n    \n- `previous` (string): Link to the previous page of results.\n    \n- `results` (array): An array of employee objects containing the following fields:\n    \n    - `id` (number): The unique identifier of the employee.\n        \n    - `created_at` (string): The date and time when the employee record was created.\n        \n    - `updated_at` (string): The date and time when the employee record was last updated.\n        \n    - `name` (string): The name of the employee.\n        \n    - `email` (string): The email address of the employee.\n        \n    - `department` (string): The department of the employee.\n        \n    - `role` (string): The role of the employee.\n        \n    - `date_joined` (string): The date when the employee joined.\n        \n\nThe structure of the response body can be documented as a JSON schema:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"count\": {\n      \"type\": \"integer\"\n    },\n    \"next\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"previous\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"results\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"id\": {\n            \"type\": \"integer\"\n          },\n          \"created_at\": {\n            \"type\": \"string\"\n          },\n          \"updated_at\": {\n            \"type\": \"string\"\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"email\": {\n            \"type\": \"string\"\n          },\n          \"department\": {\n            \"type\": \"string\"\n          },\n          \"role\": {\n            \"type\": \"string\"\n          },\n          \"date_joined\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\"id\", \"created_at\", \"updated_at\", \"name\", \"email\", \"department\", \"role\", \"date_joined\"]\n      }\n    }\n  },\n  \"required\": [\"count\", \"results\"]\n}\n\n ```\n\nA successful response will have a `200 OK` status."
+					},
+					"response": [
+						{
+							"name": "List page last",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/employees/?page=last",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										""
+									],
+									"query": [
+										{
+											"key": "department",
+											"value": "HR",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "DEVELOPER",
+											"disabled": true
+										},
+										{
+											"key": "department__in",
+											"value": "ANALYST, ENGINEERING",
+											"disabled": true
+										},
+										{
+											"key": "role__in",
+											"value": "ANALYST, DEVELOPER, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "department__not",
+											"value": "HR",
+											"disabled": true
+										},
+										{
+											"key": "role__not",
+											"value": "DEVELOPER",
+											"disabled": true
+										},
+										{
+											"key": "department__not__in",
+											"value": "HR, SALES",
+											"disabled": true
+										},
+										{
+											"key": "role__not__in",
+											"value": "ANALYST, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "last"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 06:42:53 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "818"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 23,\n    \"next\": null,\n    \"previous\": \"http://localhost:8000/api/employees/?page=2\",\n    \"results\": [\n        {\n            \"id\": 22,\n            \"created_at\": \"2024-11-02T05:23:45.437520Z\",\n            \"updated_at\": \"2024-11-02T05:23:45.437520Z\",\n            \"name\": \"Jacinthe Feeney\",\n            \"email\": \"jacinthe.feeney323@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:45.437520Z\"\n        },\n        {\n            \"id\": 23,\n            \"created_at\": \"2024-11-02T05:23:47.849537Z\",\n            \"updated_at\": \"2024-11-02T05:23:47.849537Z\",\n            \"name\": \"Lupe Rice\",\n            \"email\": \"lupe.rice569@test.com\",\n            \"department\": \"SALES\",\n            \"role\": \"MANAGER\",\n            \"date_joined\": \"2024-11-02T05:23:47.849537Z\"\n        },\n        {\n            \"id\": 24,\n            \"created_at\": \"2024-11-02T05:23:51.133939Z\",\n            \"updated_at\": \"2024-11-02T05:23:51.133939Z\",\n            \"name\": \"Darius Tremblay\",\n            \"email\": \"darius.tremblay392@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"ANALYST\",\n            \"date_joined\": \"2024-11-02T05:23:51.133939Z\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "List page 2",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/employees/?page=2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										""
+									],
+									"query": [
+										{
+											"key": "department",
+											"value": "HR",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "DEVELOPER",
+											"disabled": true
+										},
+										{
+											"key": "department__in",
+											"value": "ANALYST, ENGINEERING",
+											"disabled": true
+										},
+										{
+											"key": "role__in",
+											"value": "ANALYST, DEVELOPER, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "department__not",
+											"value": "HR",
+											"disabled": true
+										},
+										{
+											"key": "role__not",
+											"value": "DEVELOPER",
+											"disabled": true
+										},
+										{
+											"key": "department__not__in",
+											"value": "HR, SALES",
+											"disabled": true
+										},
+										{
+											"key": "role__not__in",
+											"value": "ANALYST, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 07:31:46 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2531"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 23,\n    \"next\": \"http://localhost:8000/api/employees/?page=3\",\n    \"previous\": \"http://localhost:8000/api/employees/\",\n    \"results\": [\n        {\n            \"id\": 13,\n            \"created_at\": \"2024-11-02T05:23:21.103015Z\",\n            \"updated_at\": \"2024-11-02T05:23:21.103015Z\",\n            \"name\": \"Lindsay Zieme\",\n            \"email\": \"lindsay.zieme180@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"ANALYST\",\n            \"date_joined\": \"2024-11-02T05:23:21.103015Z\"\n        },\n        {\n            \"id\": 14,\n            \"created_at\": \"2024-11-02T05:23:24.330724Z\",\n            \"updated_at\": \"2024-11-02T05:23:24.330724Z\",\n            \"name\": \"Kade Gerhold\",\n            \"email\": \"kade.gerhold670@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"ANALYST\",\n            \"date_joined\": \"2024-11-02T05:23:24.330724Z\"\n        },\n        {\n            \"id\": 15,\n            \"created_at\": \"2024-11-02T05:23:27.827722Z\",\n            \"updated_at\": \"2024-11-02T05:23:27.827722Z\",\n            \"name\": \"Meda Medhurst\",\n            \"email\": \"meda.medhurst770@test.com\",\n            \"department\": \"SALES\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:27.827722Z\"\n        },\n        {\n            \"id\": 16,\n            \"created_at\": \"2024-11-02T05:23:30.752453Z\",\n            \"updated_at\": \"2024-11-02T05:23:30.752453Z\",\n            \"name\": \"Jerrold Hodkiewicz\",\n            \"email\": \"jerrold.hodkiewicz286@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:30.752453Z\"\n        },\n        {\n            \"id\": 17,\n            \"created_at\": \"2024-11-02T05:23:33.182609Z\",\n            \"updated_at\": \"2024-11-02T05:23:33.183994Z\",\n            \"name\": \"Celia Lakin\",\n            \"email\": \"celia.lakin859@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"ANALYST\",\n            \"date_joined\": \"2024-11-02T05:23:33.182609Z\"\n        },\n        {\n            \"id\": 18,\n            \"created_at\": \"2024-11-02T05:23:35.578133Z\",\n            \"updated_at\": \"2024-11-02T05:23:35.578133Z\",\n            \"name\": \"Freddie Zulauf\",\n            \"email\": \"freddie.zulauf676@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"ANALYST\",\n            \"date_joined\": \"2024-11-02T05:23:35.578133Z\"\n        },\n        {\n            \"id\": 19,\n            \"created_at\": \"2024-11-02T05:23:38.260078Z\",\n            \"updated_at\": \"2024-11-02T05:23:38.260078Z\",\n            \"name\": \"Jillian Kerluke\",\n            \"email\": \"jillian.kerluke197@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:38.260078Z\"\n        },\n        {\n            \"id\": 20,\n            \"created_at\": \"2024-11-02T05:23:40.802272Z\",\n            \"updated_at\": \"2024-11-02T05:23:40.802272Z\",\n            \"name\": \"Rosa Hirthe\",\n            \"email\": \"rosa.hirthe667@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"MANAGER\",\n            \"date_joined\": \"2024-11-02T05:23:40.802272Z\"\n        },\n        {\n            \"id\": 21,\n            \"created_at\": \"2024-11-02T05:23:43.082502Z\",\n            \"updated_at\": \"2024-11-02T05:23:43.082502Z\",\n            \"name\": \"Everardo Jacobi\",\n            \"email\": \"everardo.jacobi623@test.com\",\n            \"department\": \"SALES\",\n            \"role\": \"MANAGER\",\n            \"date_joined\": \"2024-11-02T05:23:43.082502Z\"\n        },\n        {\n            \"id\": 22,\n            \"created_at\": \"2024-11-02T05:23:45.437520Z\",\n            \"updated_at\": \"2024-11-02T05:23:45.437520Z\",\n            \"name\": \"Jacinthe Feeney\",\n            \"email\": \"jacinthe.feeney323@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:45.437520Z\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "List filter department",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/employees/?department=HR",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										""
+									],
+									"query": [
+										{
+											"key": "department",
+											"value": "HR"
+										},
+										{
+											"key": "role",
+											"value": "DEVELOPER",
+											"disabled": true
+										},
+										{
+											"key": "department__in",
+											"value": "ANALYST, ENGINEERING",
+											"disabled": true
+										},
+										{
+											"key": "role__in",
+											"value": "ANALYST, DEVELOPER, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "department__not",
+											"value": "HR",
+											"disabled": true
+										},
+										{
+											"key": "role__not",
+											"value": "DEVELOPER",
+											"disabled": true
+										},
+										{
+											"key": "department__not__in",
+											"value": "HR, SALES",
+											"disabled": true
+										},
+										{
+											"key": "role__not__in",
+											"value": "ANALYST, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 07:33:26 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2163"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 9,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 1,\n            \"created_at\": \"2024-11-01T05:03:14.445074Z\",\n            \"updated_at\": \"2024-11-04T07:12:37.161787Z\",\n            \"name\": \"Davin Lockman\",\n            \"email\": \"davin.lockman466@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-01T05:03:14.445074Z\"\n        },\n        {\n            \"id\": 3,\n            \"created_at\": \"2024-11-01T05:10:42.818688Z\",\n            \"updated_at\": \"2024-11-01T05:10:42.818688Z\",\n            \"name\": \"Savion Swift\",\n            \"email\": \"savion.swift593@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"MANAGER\",\n            \"date_joined\": \"2024-11-01T05:10:42.818688Z\"\n        },\n        {\n            \"id\": 8,\n            \"created_at\": \"2024-11-02T05:14:24.894664Z\",\n            \"updated_at\": \"2024-11-02T05:14:24.894664Z\",\n            \"name\": \"Demario Adams\",\n            \"email\": \"demario.adams326@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"MANAGER\",\n            \"date_joined\": \"2024-11-02T05:14:24.894664Z\"\n        },\n        {\n            \"id\": 9,\n            \"created_at\": \"2024-11-02T05:14:28.178938Z\",\n            \"updated_at\": \"2024-11-02T05:14:28.178938Z\",\n            \"name\": \"Emelie Mueller\",\n            \"email\": \"emelie.mueller901@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:14:28.178938Z\"\n        },\n        {\n            \"id\": 11,\n            \"created_at\": \"2024-11-02T05:14:34.650910Z\",\n            \"updated_at\": \"2024-11-02T05:14:34.650910Z\",\n            \"name\": \"Zackary Kohler\",\n            \"email\": \"zackary.kohler736@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"MANAGER\",\n            \"date_joined\": \"2024-11-02T05:14:34.650910Z\"\n        },\n        {\n            \"id\": 13,\n            \"created_at\": \"2024-11-02T05:23:21.103015Z\",\n            \"updated_at\": \"2024-11-02T05:23:21.103015Z\",\n            \"name\": \"Lindsay Zieme\",\n            \"email\": \"lindsay.zieme180@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"ANALYST\",\n            \"date_joined\": \"2024-11-02T05:23:21.103015Z\"\n        },\n        {\n            \"id\": 18,\n            \"created_at\": \"2024-11-02T05:23:35.578133Z\",\n            \"updated_at\": \"2024-11-02T05:23:35.578133Z\",\n            \"name\": \"Freddie Zulauf\",\n            \"email\": \"freddie.zulauf676@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"ANALYST\",\n            \"date_joined\": \"2024-11-02T05:23:35.578133Z\"\n        },\n        {\n            \"id\": 19,\n            \"created_at\": \"2024-11-02T05:23:38.260078Z\",\n            \"updated_at\": \"2024-11-02T05:23:38.260078Z\",\n            \"name\": \"Jillian Kerluke\",\n            \"email\": \"jillian.kerluke197@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:38.260078Z\"\n        },\n        {\n            \"id\": 20,\n            \"created_at\": \"2024-11-02T05:23:40.802272Z\",\n            \"updated_at\": \"2024-11-02T05:23:40.802272Z\",\n            \"name\": \"Rosa Hirthe\",\n            \"email\": \"rosa.hirthe667@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"MANAGER\",\n            \"date_joined\": \"2024-11-02T05:23:40.802272Z\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "List filter role",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/employees/?role=DEVELOPER",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										""
+									],
+									"query": [
+										{
+											"key": "department",
+											"value": "HR",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "DEVELOPER"
+										},
+										{
+											"key": "department__in",
+											"value": "ANALYST, ENGINEERING",
+											"disabled": true
+										},
+										{
+											"key": "role__in",
+											"value": "ANALYST, DEVELOPER, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "department__not",
+											"value": "HR",
+											"disabled": true
+										},
+										{
+											"key": "role__not",
+											"value": "DEVELOPER",
+											"disabled": true
+										},
+										{
+											"key": "department__not__in",
+											"value": "HR, SALES",
+											"disabled": true
+										},
+										{
+											"key": "role__not__in",
+											"value": "ANALYST, MANAGER",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "2",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 07:36:14 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2475"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"count\": 10,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 1,\n            \"created_at\": \"2024-11-01T05:03:14.445074Z\",\n            \"updated_at\": \"2024-11-04T07:12:37.161787Z\",\n            \"name\": \"Davin Lockman\",\n            \"email\": \"davin.lockman466@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-01T05:03:14.445074Z\"\n        },\n        {\n            \"id\": 6,\n            \"created_at\": \"2024-11-02T05:13:58.829410Z\",\n            \"updated_at\": \"2024-11-02T05:13:58.830426Z\",\n            \"name\": \"Halie Cronin\",\n            \"email\": \"halie.cronin579@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:13:58.829410Z\"\n        },\n        {\n            \"id\": 9,\n            \"created_at\": \"2024-11-02T05:14:28.178938Z\",\n            \"updated_at\": \"2024-11-02T05:14:28.178938Z\",\n            \"name\": \"Emelie Mueller\",\n            \"email\": \"emelie.mueller901@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:14:28.178938Z\"\n        },\n        {\n            \"id\": 10,\n            \"created_at\": \"2024-11-02T05:14:31.225371Z\",\n            \"updated_at\": \"2024-11-02T05:14:31.225371Z\",\n            \"name\": \"Everette Batz\",\n            \"email\": \"everette.batz162@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:14:31.225371Z\"\n        },\n        {\n            \"id\": 12,\n            \"created_at\": \"2024-11-02T05:23:16.315641Z\",\n            \"updated_at\": \"2024-11-02T05:23:16.315641Z\",\n            \"name\": \"Deshaun Koepp\",\n            \"email\": \"deshaun.koepp704@test.com\",\n            \"department\": \"SALES\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:16.315641Z\"\n        },\n        {\n            \"id\": 15,\n            \"created_at\": \"2024-11-02T05:23:27.827722Z\",\n            \"updated_at\": \"2024-11-02T05:23:27.827722Z\",\n            \"name\": \"Meda Medhurst\",\n            \"email\": \"meda.medhurst770@test.com\",\n            \"department\": \"SALES\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:27.827722Z\"\n        },\n        {\n            \"id\": 16,\n            \"created_at\": \"2024-11-02T05:23:30.752453Z\",\n            \"updated_at\": \"2024-11-02T05:23:30.752453Z\",\n            \"name\": \"Jerrold Hodkiewicz\",\n            \"email\": \"jerrold.hodkiewicz286@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:30.752453Z\"\n        },\n        {\n            \"id\": 19,\n            \"created_at\": \"2024-11-02T05:23:38.260078Z\",\n            \"updated_at\": \"2024-11-02T05:23:38.260078Z\",\n            \"name\": \"Jillian Kerluke\",\n            \"email\": \"jillian.kerluke197@test.com\",\n            \"department\": \"HR\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:38.260078Z\"\n        },\n        {\n            \"id\": 22,\n            \"created_at\": \"2024-11-02T05:23:45.437520Z\",\n            \"updated_at\": \"2024-11-02T05:23:45.437520Z\",\n            \"name\": \"Jacinthe Feeney\",\n            \"email\": \"jacinthe.feeney323@test.com\",\n            \"department\": \"ENGINEERING\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-02T05:23:45.437520Z\"\n        },\n        {\n            \"id\": 25,\n            \"created_at\": \"2024-11-04T06:44:42.717331Z\",\n            \"updated_at\": \"2024-11-04T06:44:42.717331Z\",\n            \"name\": \"Joannie Ziemann\",\n            \"email\": \"joannie.ziemann87@test.com\",\n            \"department\": \"SALES\",\n            \"role\": \"DEVELOPER\",\n            \"date_joined\": \"2024-11-04T06:44:42.717331Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Create auto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Name\r",
+									"var strFirstName = pm.iterationData.get(\"strFirstName\");\r",
+									"strFirstName = strFirstName || pm.variables.replaceIn('{{$randomFirstName}}');\r",
+									"var strLastName = pm.iterationData.get(\"strLastName\");\r",
+									"strLastName = strLastName || pm.variables.replaceIn('{{$randomLastName}}');\r",
+									"pm.variables.set(\"auto_name\", strFirstName + ' ' + strLastName);\r",
+									"\r",
+									"// Email\r",
+									"var strEmail = pm.iterationData.get(\"strEmail\");\r",
+									"strEmail = strEmail || strFirstName + '.' + strLastName + pm.variables.replaceIn('{{$randomInt}}') + '@test.com';\r",
+									"pm.variables.set(\"auto_email\", strEmail.toLowerCase());\r",
+									"\r",
+									"// Department\r",
+									"const department = ['HR', 'ENGINEERING', 'SALES'];\r",
+									"var strDepartment = pm.iterationData.get('strDepartment');\r",
+									"strDepartment = strDepartment || randomDepartment(department);\r",
+									"pm.variables.set('auto_dept', strDepartment);\r",
+									"\r",
+									"function randomDepartment(department) {\r",
+									"    return department[randomInteger(0, department.length-1)];\r",
+									"}\r",
+									"\r",
+									"// Role\r",
+									"const role = ['MANAGER', 'DEVELOPER', 'ANALYST'];\r",
+									"var strRole = pm.iterationData.get('strRole');\r",
+									"strRole = strRole || randomRole(role);\r",
+									"pm.variables.set('auto_role', strRole);\r",
+									"\r",
+									"function randomRole(role) {\r",
+									"    return role[randomInteger(0, role.length-1)];\r",
+									"}\r",
+									"\r",
+									"\r",
+									"function randomInteger(min, max) {\r",
+									"    return Math.floor(Math.random() * (max - min + 1) + min);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{auto_name}}\",\n    \"email\": \"{{auto_email}}\",\n    \"department\": \"{{auto_dept}}\",\n    \"role\": \"{{auto_role}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/employees/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"employees",
+								""
+							]
+						},
+						"description": "### Create New Employee\n\nThis endpoint is used to create a new employee by submitting a POST request to the specified URL.\n\n#### Input\n\nThe request body should be in JSON format and include the following parameters:\n\n- `name`: The name of the employee.\n    \n- `email`: The email address of the employee.\n    \n- `department`: The department to which the employee belongs.\n    \n- `role`: The role or designation of the employee.\n    \n\nExample request body:\n\n``` json\n{\n  \"name\": \"Joe Dalton\",\n  \"email\": \"joe@dalton.com\",\n  \"department\": \"SALES\",\n  \"role\": \"ANALYST\"\n}\n\n ```\n\n#### Output\n\nUpon successful creation of the employee, the API will respond with a status code of 201 (Created) and a JSON object containing the details of the newly created employee, including:\n\n- `id`: The unique identifier of the employee.\n    \n- `created_at`: The date and time when the employee record was created.\n    \n- `updated_at`: The date and time when the employee record was last updated.\n    \n- `name`: The name of the employee.\n    \n- `email`: The email address of the employee.\n    \n- `department`: The department to which the employee belongs.\n    \n- `role`: The role or designation of the employee.\n    \n- `date_joined`: The date when the employee joined.\n    \n\nExample response body:\n\n``` json\n{\n    \"id\": 25,\n    \"created_at\": \"2024-11-04T06:44:42.717331Z\",\n    \"updated_at\": \"2024-11-04T06:44:42.717331Z\",\n    \"name\": \"Joannie Ziemann\",\n    \"email\": \"joannie.ziemann87@test.com\",\n    \"department\": \"SALES\",\n    \"role\": \"DEVELOPER\",\n    \"date_joined\": \"2024-11-04T06:44:42.717331Z\"\n}\n\n ```\n\nThe response of this request can be documented as a JSON schema:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\"\n    },\n    \"created_at\": {\n      \"type\": \"string\"\n    },\n    \"updated_at\": {\n      \"type\": \"string\"\n    },\n    \"name\": {\n      \"type\": \"string\"\n    },\n    \"email\": {\n      \"type\": \"string\"\n    },\n    \"department\": {\n      \"type\": \"string\"\n    },\n    \"role\": {\n      \"type\": \"string\"\n    },\n    \"date_joined\": {\n      \"type\": \"string\"\n    }\n  }\n}\n\n ```\n\nA successful POST request will typically return a status code of 201 (Created)."
+					},
+					"response": [
+						{
+							"name": "Create data auto",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{auto_name}}\",\n    \"email\": \"{{auto_email}}\",\n    \"department\": \"{{auto_dept}}\",\n    \"role\": \"{{auto_role}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/employees/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 06:44:42 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "241"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 25,\n    \"created_at\": \"2024-11-04T06:44:42.717331Z\",\n    \"updated_at\": \"2024-11-04T06:44:42.717331Z\",\n    \"name\": \"Joannie Ziemann\",\n    \"email\": \"joannie.ziemann87@test.com\",\n    \"department\": \"SALES\",\n    \"role\": \"DEVELOPER\",\n    \"date_joined\": \"2024-11-04T06:44:42.717331Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Retrieve",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/employees/:id/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"employees",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "### GET Employee Details\n\nThis endpoint is used to retrieve the details of a specific employee.\n\n#### Request\n\n- Method: GET\n    \n- URL: `{{base_url}}/api/employees/:id/`\n    \n\n#### Response\n\nThe response will be in JSON format and will have the following schema:\n\n``` json\n{\n  \"id\": \"number\",\n  \"created_at\": \"string\",\n  \"updated_at\": \"string\",\n  \"name\": \"string\",\n  \"email\": \"string\",\n  \"department\": \"string\",\n  \"role\": \"string\",\n  \"date_joined\": \"string\"\n}\n\n ```"
+					},
+					"response": [
+						{
+							"name": "Retrieve data",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/employees/:id/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 06:54:49 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "234"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"created_at\": \"2024-11-01T05:03:14.445074Z\",\n    \"updated_at\": \"2024-11-01T15:29:48.953820Z\",\n    \"name\": \"Davin Lockman\",\n    \"email\": \"davin.lockman466@test.com\",\n    \"department\": \"HR\",\n    \"role\": \"DEVELOPER\",\n    \"date_joined\": \"2024-11-01T05:03:14.445074Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Davin Lockman\",\n    \"email\": \"davin.lockman466@test.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/employees/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"employees",
+								"1",
+								""
+							]
+						},
+						"description": "### Update Employee Data\n\nThis endpoint is used to overwrite the information of an employee identified by the given `id`. The request should include the updated data in the request body.\n\n#### Request\n\n- Method: PUT\n    \n- URL: `{{base_url}}/api/employees/:id/`\n    \n\n#### Request Body\n\n- The request body should be in raw format and include the following parameters:\n    \n    - `name`: (string) The updated name of the employee.\n        \n    - `email`: (string) The updated email address of the employee.\n        \n    - `department`: (string) Optional. Permissible values `HR`, `ENGINEERING`, `SALES`\n        \n    - `role`: (string) Optional. Permissible values `DEVELOPER`, `MANAGER`, `ANALYST`\n        \n\n#### Response\n\nThe response of this request can be documented as a JSON schema:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"id\": {\n      \"type\": \"integer\"\n    },\n    \"created_at\": {\n      \"type\": \"string\"\n    },\n    \"updated_at\": {\n      \"type\": \"string\"\n    },\n    \"name\": {\n      \"type\": \"string\"\n    },\n    \"email\": {\n      \"type\": \"string\"\n    },\n    \"department\": {\n      \"type\": \"string\"\n    },\n    \"role\": {\n      \"type\": \"string\"\n    },\n    \"date_joined\": {\n      \"type\": \"string\"\n    }\n  }\n}\n\n ```\n\nA successful response will have a status code of `200` and a `Content-Type` of `application/json`. The response body will contain the updated information of the employee, including their `id`, `created_at`, `updated_at`, `name`, `email`, `department`, `role`, and `date_joined`."
+					},
+					"response": [
+						{
+							"name": "Update data",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Davin Lockman\",\n    \"email\": \"davin.lockman466@test.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/employees/1/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 06:55:11 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "234"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"created_at\": \"2024-11-01T05:03:14.445074Z\",\n    \"updated_at\": \"2024-11-04T06:55:11.075610Z\",\n    \"name\": \"Davin Lockman\",\n    \"email\": \"davin.lockman466@test.com\",\n    \"department\": \"HR\",\n    \"role\": \"DEVELOPER\",\n    \"date_joined\": \"2024-11-01T05:03:14.445074Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Partial update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"DEVELOPER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/employees/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"employees",
+								"1",
+								""
+							]
+						},
+						"description": "### Partial Update Employee\n\nThis endpoint is used to partially update the details of an employee (one or more attributes).\n\n#### Request\n\n- Method: PATCH\n    \n- URL: `{{base_url}}/api/employees/:id/`\n    \n\n#### Request Body\n\n- The request body should be a JSON payload with the updated attribute(s) information and may include any combination of the following parameters:\n    \n    - `name`: (string) The updated name of the employee.\n        \n    - `email`: (string) The updated email address of the employee.\n        \n    - `department`: (string) Permissible values `HR`, `ENGINEERING`, `SALES`\n        \n    - `role`: (string) Permissible values `DEVELOPER`, `MANAGER`, `ANALYST`\n        \n\n#### Response\n\nThe response of the request is a JSON object with the following schema:\n\n``` json\n{\n  \"id\": \"number\",\n  \"created_at\": \"string\",\n  \"updated_at\": \"string\",\n  \"name\": \"string\",\n  \"email\": \"string\",\n  \"department\": \"string\",\n  \"role\": \"string\",\n  \"date_joined\": \"string\"\n}\n\n ```"
+					},
+					"response": [
+						{
+							"name": "Partial Update data",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"role\": \"DEVELOPER\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/employees/1/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"employees",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 04 Nov 2024 07:12:37 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.12.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "234"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"created_at\": \"2024-11-01T05:03:14.445074Z\",\n    \"updated_at\": \"2024-11-04T07:12:37.161787Z\",\n    \"name\": \"Davin Lockman\",\n    \"email\": \"davin.lockman466@test.com\",\n    \"department\": \"HR\",\n    \"role\": \"DEVELOPER\",\n    \"date_joined\": \"2024-11-01T05:03:14.445074Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/employees/:id/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"employees",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "7"
+								}
+							]
+						},
+						"description": "### DELETE Employee\n\nThis DELETE request is used to delete data that was previously created via a POST request. You can identify the specific employee to be deleted by including the employee's identifier in the URL (e.g. `/api/employees/123`).\n\n#### Request Body\n\nThis request does not require a request body.\n\n#### Response Body\n\nThe response for this request does not include a body.\n\n#### Response\n\n- Status: 204\n    \n- Content-Type: text/xml\n    \n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code.\n\n#### JSON Schema\n\n``` json\n{}\n\n ```"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refresh_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "sam",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "1234",
+			"type": "string"
+		}
+	]
+}

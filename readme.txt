@@ -2,6 +2,38 @@ Project: Employee Management Backend
 - A set of REST APIs allowing a company to efficiently manage their employees' records
 
 
+NOTE:
+- The API documentation is mentioned under 'api_doc.md' file for your quick reference
+- Please refer the postman collection for API examples and documentation
+  -- Employee_Management_REST_APIs.postman_collection.json
+
+Creating users who will manage the employees:
+- To create a new user, run the below command from the terminal and enter the username and password.
+NOTE: email is an optional field
+  -- Command: py -m manage createsuperuser
+
+Running the app on the local server:
+- Setting up the virtual environment: Execute the below commands on the terminal from the project root directory
+  -- Create Command: py -m venv .venv
+  -- Activate Command (Windows): .\.venv\Scripts\activate
+  -- For Mac OS please refer the following link:
+    --- https://python.land/virtual-environments/virtualenv
+- Ensure all the dependencies in the requirements.txt file are installed
+- To run the app, open the terminal and execute the below command:
+  -- Command: py -m manage runserver
+- Running tests:
+  -- Open the terminal and execute the below command:
+    --- Executing all the tests:
+      ---- Command: pytest
+    --- Executing tests from a specific module
+      ---- Command: pytest employee_mgmt/tests/test_models.py
+    --- Executing a specific test
+      ---- Command: pytest employee_mgmt/tests/test_views.py::test_accessing_employees_endpoint_requires_authentication
+  -- NOTE:
+    --- Live logging is enabled in pytest settings.
+    --- Disabling live log: Refer <project_root>/pytest.ini file and update the below flag
+      ---- log_cli = 0
+
 Endpoints:
 - employees: [SECURED]
   -- list: GET api/employees/
